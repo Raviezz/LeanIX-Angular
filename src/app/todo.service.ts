@@ -19,6 +19,7 @@ export class TodoService {
         items{
         id
           name
+          description
           position
           listId
       }
@@ -70,6 +71,14 @@ export class TodoService {
     position
   }
 }`;
+    console.log("req ", body.toString())
+    return this.http.post<any>('http://localhost:8080/rest/lists/', body);
+  }
+
+  deleteSubTask(id: any) {
+    const body = `mutation{
+      deleteItem(id:`+ id + `)
+  }`;
     console.log("req ", body.toString())
     return this.http.post<any>('http://localhost:8080/rest/lists/', body);
   }

@@ -9,10 +9,7 @@
                                 style="display: flex;justify-content: space-between;">
                                 <div>
                                     <h5 class="mb-0">
-                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                                            aria-expanded="true" aria-controls="collapseOne">
-                                            {{todo.name}}
-                                        </button>
+                                        {{todo.name}}
                                     </h5>
                                 </div>
                                 <div>
@@ -21,7 +18,8 @@
                                         Update</button>
                                     <button (click)="onToDoDelete(todo)" type="button" style="margin-right: 2px;"
                                         class="btn btn-danger btn-sm">Delete</button>
-                                    <button type="button" class="btn btn-success btn-sm">Add SubTask</button>
+                                    <button (click)="onCreateSubTask(todo)" type="button" [disabled]="isSubTask"
+                                        class="btn btn-success btn-sm">Add SubTask</button>
                                 </div>
 
                             </div>
@@ -35,15 +33,14 @@
                                         <div class="card-body" style="display: flex;justify-content: space-between;">
                                             <div>
                                                 <h5 class="mb-0">
-                                                    <button class="btn btn-link" data-toggle="collapse"
-                                                        data-target="#collapseOne" aria-expanded="true"
-                                                        aria-controls="collapseOne">
-                                                        {{item.name}}
-                                                    </button>
+                                                    <b>{{item.name}}</b>
+
                                                 </h5>
+                                                <p>{{item.description}}</p>
                                             </div>
                                             <div>
-                                                <button type="button" class="btn btn-sm btn-danger">Delete</button>
+                                                <button (click)="onDeleteSubTask(item.id)" type="button"
+                                                    class="btn btn-sm btn-danger">Delete</button>
                                             </div>
                                         </div>
                                     </div>
@@ -56,11 +53,13 @@
         </div>
         <div class="col-4">
             <form>
+                <h3 *ngIf="isSubTask">Creating SubTask for
+                    <p style="color: chocolate;">{{headerText}}</p>
+                </h3>
                 <div class="form-group">
                     <label for="exampleInputEmail1">ToDo Title</label>
                     <input [(ngModel)]="todoTitle" type="text" class="form-control" name="todoTitle"
                         id="exampleInputEmail1" placeholder="Enter title" value="{{todoTitle}}" required>
-
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Description</label>
@@ -68,8 +67,14 @@
                         id="exampleInputPassword1" placeholder="Description" required>
                 </div>
                 <input type="hidden" [(ngModel)]="todoId" value="{{todoId}}" name="todoId">
-                <button *ngIf="!isUpdate" (click)="createToDo()" type="submit" class="btn btn-primary">Create</button>
-                <button *ngIf="isUpdate" (click)="updateToDo()" type="submit" class="btn btn-primary">Update</button>
+                <button *ngIf="isSubTask" (click)="createSubTask()" type="submit" class="btn btn-primary">Create Sub
+                    Task</button>
+                <button *ngIf="isSubTask" (click)="resetUI()" type="submit" class="btn btn-primary m-3">Cancel
+                </button>
+                <button *ngIf="!isUpdate && !isSubTask" (click)="createToDo()" type="submit"
+                    class="btn btn-primary">Create</button>
+                <button *ngIf="isUpdate && !isSubTask" (click)="updateToDo()" type="submit"
+                    class="btn btn-primary">Update</button>
             </form>
         </div>
     </div>
